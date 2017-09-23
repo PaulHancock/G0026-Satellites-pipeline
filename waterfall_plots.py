@@ -55,7 +55,6 @@ def track_satellite(mwa, sate, namefmt, pixoffset=0, timeoffset=0):
     Make a waterfall plot, returning data in an array of  (freq,time)
     :param mwa: ephem.Observer
     :param sate: ephem.TLE for the sattlite
-    :param time: datetime (ignored)
     :param namefmt: example "flagging/1102604896-sm-t{0:04d}-all-image.fits
     :param pixoffset: int, offset for pixels
     :param timeoffset: int, offset for time (seconds)
@@ -149,27 +148,27 @@ if __name__ == "__main__":
         dt = v['dt']  # get_timestamp(v['time'])
         mwa, satellite = get_location_satellite(dt, satellite=k)
 
-        for flag in ['flagging/' ,'noflagging/']:
+        for flag in ['flagging/', 'noflagging/']:
             # append the right directory
             fmt = flag + v['namefmt']
-            # for pixoffset in [0, 20]:
-            #     name = '{0}_{1}{2:+02d}px.fits'.format(k, flag[:-1], pixoffset)
-            #     if os.path.exists(name):
-            #         print "skipping {0} (exists)".format(name)
-            #         continue
-            #     else:
-            #         print name, '...'
-            #     data = track_satellite(mwa, satellite, namefmt=fmt, pixoffset=pixoffset, timeoffset=2)
-            #     save_data(data, name, **v)
-            #     print '.. done'
+            for pixoffset in [0, 20]:
+                name = '{0}_{1}{2:+02d}px.fits'.format(k, flag[:-1], pixoffset)
+                if os.path.exists(name):
+                    print "skipping {0} (exists)".format(name)
+                    continue
+                else:
+                    print name, '...'
+                data = track_satellite(mwa, satellite, namefmt=fmt, pixoffset=pixoffset, timeoffset=2)
+                save_data(data, name, **v)
+                print '.. done'
 
-             for toff in [2]:  # [-4, 4]:
-                 name = '{0}_{1}{2:+02d}s.fits'.format(k, flag[:-1], toff)
-                 if os.path.exists(name):
-                     print "skipping {0} (exists)".format(name)
-                     continue
-                 else:
-                     print name, '...'
-                 data = track_satellite(mwa, satellite, namefmt=fmt, pixoffset=0, timeoffset=toff)
-                 save_data(data, name, **v)
-                 print '.. done'
+            for toff in [-4, 4]:
+                name = '{0}_{1}{2:+02d}s.fits'.format(k, flag[:-1], toff)
+                if os.path.exists(name):
+                    print "skipping {0} (exists)".format(name)
+                    continue
+                else:
+                    print name, '...'
+                data = track_satellite(mwa, satellite, namefmt=fmt, pixoffset=0, timeoffset=toff+2)
+                save_data(data, name, **v)
+                print '.. done'
