@@ -145,7 +145,8 @@ if __name__ == "__main__":
             continue  # just do duchifat
         v = deets[k]
         print k
-        dt = v['dt']  # get_timestamp(v['time'])
+        # This isn't used but is required because i'm too lazy to write around it.
+        dt = datetime(2014, 12, 14, 14, 40, 0)
         mwa, satellite = get_location_satellite(dt, satellite=k)
 
         for flag in ['flagging/', 'noflagging/']:
